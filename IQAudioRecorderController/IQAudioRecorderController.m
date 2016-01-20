@@ -288,10 +288,15 @@
     if (_audioRecorder.isRecording)
     {
         [_audioRecorder updateMeters];
+        CGFloat normalizedValue=.0f;
+        CGFloat averagePower=[_audioRecorder averagePowerForChannel:0];
+        if (averagePower < -60.0f || averagePower == 0.0f) {
+            normalizedValue= 0.0f;
+        }else{
+            normalizedValue= powf((powf(10.0f, 0.05f * averagePower) - powf(10.0f, 0.05f * -60.0f)) * (1.0f / (1.0f - powf(10.0f, 0.05f * -60.0f))), 1.0f / 2.0f);
+        }
         
-        CGFloat normalizedValue = pow (10, [_audioRecorder averagePowerForChannel:0] / 20);
-        
-        [musicFlowView setWaveColor:_recordingTintColor];
+        //---[musicFlowView setWaveColor:_recordingTintColor];
         [musicFlowView updateWithLevel:normalizedValue];
         
         self.navigationItem.title = [NSString timeStringForTimeInterval:_audioRecorder.currentTime];
@@ -300,9 +305,14 @@
     {
         [_audioPlayer updateMeters];
         
-        CGFloat normalizedValue = pow (10, [_audioPlayer averagePowerForChannel:0] / 20);
-        
-        [musicFlowView setWaveColor:_playingTintColor];
+        CGFloat normalizedValue=.0f;
+        CGFloat averagePower=[_audioPlayer averagePowerForChannel:0];
+        if (averagePower < -60.0f || averagePower == 0.0f) {
+            normalizedValue= 0.0f;
+        }else{
+            normalizedValue= powf((powf(10.0f, 0.05f * averagePower) - powf(10.0f, 0.05f * -60.0f)) * (1.0f / (1.0f - powf(10.0f, 0.05f * -60.0f))), 1.0f / 2.0f);
+        }
+        //---[musicFlowView setWaveColor:_playingTintColor];
         [musicFlowView updateWithLevel:normalizedValue];
     }
     else
