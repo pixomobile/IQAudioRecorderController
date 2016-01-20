@@ -295,8 +295,10 @@
         }else{
             normalizedValue= powf((powf(10.0f, 0.05f * averagePower) - powf(10.0f, 0.05f * -60.0f)) * (1.0f / (1.0f - powf(10.0f, 0.05f * -60.0f))), 1.0f / 2.0f);
         }
-        
-        //---[musicFlowView setWaveColor:_recordingTintColor];
+        if(!_recordingTintColor){
+            _recordingTintColor=[UIColor whiteColor];
+        }
+        [musicFlowView setWaveColor:_recordingTintColor];
         [musicFlowView updateWithLevel:normalizedValue];
         
         self.navigationItem.title = [NSString timeStringForTimeInterval:_audioRecorder.currentTime];
@@ -312,7 +314,9 @@
         }else{
             normalizedValue= powf((powf(10.0f, 0.05f * averagePower) - powf(10.0f, 0.05f * -60.0f)) * (1.0f / (1.0f - powf(10.0f, 0.05f * -60.0f))), 1.0f / 2.0f);
         }
-        //---[musicFlowView setWaveColor:_playingTintColor];
+        if(!_playingTintColor){
+            _playingTintColor=[UIColor whiteColor];
+        }
         [musicFlowView updateWithLevel:normalizedValue];
     }
     else
